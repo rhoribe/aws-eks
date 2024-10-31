@@ -4,7 +4,7 @@ This project deploys an Amazon EKS (Elastic Kubernetes Service) cluster using Te
 
 ## Prerequisites
 
-1. **Terraform**: Make sure Terraform is installed (~= 1.9.0).
+1. **Terraform**: Make sure Terraform is installed (~> 1.9.0).
 2. **AWS CLI**: Configure the AWS CLI with your credentials.
 3. **IAM Permissions**: Ensure that the user has permissions to create EKS and IAM resources on AWS.
 4. **kubectl**: To manage the Kubernetes cluster, install kubectl.
