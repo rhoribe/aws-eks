@@ -1,5 +1,3 @@
-
-#### Cadastro Power Node Group
 resource "aws_eks_node_group" "this" {
   for_each        = local.node_groups
   node_group_name = each.value.name
