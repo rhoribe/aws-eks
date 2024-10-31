@@ -18,8 +18,8 @@ Follow these steps to set up the EKS cluster.
 Clone this repository to your local machine.
 
 ```bash
-git clone https://github.com/rhoribe/aws-ec2-autoscaling.git
-cd aws-ec2-autoscaling
+git clone https://github.com/rhoribe/aws-eks.git
+cd aws-eks
 ```
 
 
