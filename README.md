@@ -1,27 +1,68 @@
-# Deploy an EKS Cluster with Terraform
+# Módulo Terraform para provisionar um cluster Amazon EKS
 
-This project deploys an Amazon EKS (Elastic Kubernetes Service) cluster using Terraform. It sets up a managed Kubernetes cluster on AWS, enabling you to run containerized applications on a scalable infrastructure.
+Este repositório entrega um **módulo Terraform reutilizável** para criar e configurar um cluster **Amazon EKS (Elastic Kubernetes Service)** na AWS.
 
-## Prerequisites
+Em vez de configurar EKS manualmente (IAM, segurança, add-ons, node groups e integrações), você usa este módulo como base para subir um ambiente Kubernetes consistente, versionável e reproduzível.
 
-1. **Terraform**: Make sure Terraform is installed (~> 1.9.0).
-2. **AWS CLI**: Configure the AWS CLI with your credentials.
-3. **IAM Permissions**: Ensure that the user has permissions to create EKS and IAM resources on AWS.
-4. **kubectl**: To manage the Kubernetes cluster, install kubectl.
+## Para que este projeto serve
 
-## Getting Started
+Este projeto foi criado para equipes que precisam:
 
-Follow these steps to set up the EKS cluster.
+- Provisionar clusters EKS com padrão único entre ambientes (dev, hml, prod);
+- Reduzir esforço operacional na criação de infraestrutura Kubernetes na AWS;
+- Aplicar boas práticas de segurança e observabilidade já no provisionamento;
+- Ter infraestrutura como código (IaC) com controle de versão e revisão via Git.
 
-### Clone the Repository
+Na prática, ele provisiona os blocos principais de um cluster EKS:
 
-Clone this repository to your local machine.
+- **Cluster EKS gerenciado**;
+- **Node groups** para execução dos workloads;
+- **IAM roles e policies** para control plane e workers;
+- **KMS key** para criptografia de segredos do cluster;
+- **CloudWatch log group** para logs do control plane;
+- **Add-ons gerenciados** (CoreDNS, kube-proxy e VPC CNI);
+- **Security groups e regras** para comunicação entre plano de controle, nós e serviços;
+- **Configuração `aws-auth`** no Kubernetes para autenticação/autorização inicial.
+
+## Quando usar este módulo
+
+Use este módulo quando você já possui (ou quer definir) uma VPC/subnets e precisa de um cluster EKS pronto para receber aplicações containerizadas.
+
+Ele é especialmente útil para:
+
+- Plataformas internas de microserviços;
+- Times que estão migrando de ECS/VM para Kubernetes;
+- Ambientes multi-conta/multi-região que exigem padronização de infraestrutura.
+
+## Pré-requisitos
+
+1. **Terraform** instalado (`~> 1.9.0`);
+2. **AWS CLI** configurado com credenciais válidas;
+3. Permissões IAM para criar recursos de EKS, IAM, EC2, KMS e CloudWatch;
+4. **kubectl** instalado para administrar o cluster após o provisionamento.
+
+## Como começar
+
+### 1) Clonar o repositório
 
 ```bash
 git clone https://github.com/rhoribe/aws-eks.git
 cd aws-eks
 ```
 
+### 2) Usar o exemplo como ponto de partida
+
+Há uma pasta `example/` com um uso de referência do módulo. Ajuste os valores de acordo com sua conta e rede AWS.
+
+### 3) Inicializar e aplicar
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+Após o `apply`, utilize os outputs do módulo para configurar acesso com `kubectl`.
 
 ## Requirements
 
@@ -114,4 +155,4 @@ cd aws-eks
 | <a name="output_cluster_role_arn"></a> [cluster\_role\_arn](#output\_cluster\_role\_arn) | ARN of the IAM role used by the EKS cluster for managing AWS resources |
 | <a name="output_cluster_security_group_custom_id"></a> [cluster\_security\_group\_custom\_id](#output\_cluster\_security\_group\_custom\_id) | Security group ID attached to the EKS cluster |
 | <a name="output_cluster_security_group_id"></a> [cluster\_security\_group\_id](#output\_cluster\_security\_group\_id) | Security group ID attached to the EKS cluster |
-| <a name="output_worker_role_arn"></a> [worker\_role\_arn](#output\_worker\_role\_arn) | ARN of the IAM role assigned to EKS worker nodes, allowing them to interact with AWS resources |README.md
+| <a name="output_worker_role_arn"></a> [worker\_role\_arn](#output\_worker\_role\_arn) | ARN of the IAM role assigned to EKS worker nodes, allowing them to interact with AWS resources |
